@@ -17,7 +17,7 @@ public class SpinnerDatePickerDialogBuilder {
     private Calendar minDate = new GregorianCalendar(1900, 0, 1);
     private Calendar maxDate = new GregorianCalendar(2100, 0, 1);
     private String mTitleCaption = "";
-    private String mAccentColor = "#000000";
+    private String mAccentColor;
 
 
     public SpinnerDatePickerDialogBuilder context(Context context) {
