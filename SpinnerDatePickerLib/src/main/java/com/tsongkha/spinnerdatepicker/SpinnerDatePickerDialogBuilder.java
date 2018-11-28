@@ -17,6 +17,7 @@ public class SpinnerDatePickerDialogBuilder {
     private Calendar minDate = new GregorianCalendar(1900, 0, 1);
     private Calendar maxDate = new GregorianCalendar(2100, 0, 1);
     private String mTitleCaption = "";
+    private String mAccentColor = "#000000";
 
 
     public SpinnerDatePickerDialogBuilder context(Context context) {
@@ -69,10 +70,17 @@ public class SpinnerDatePickerDialogBuilder {
         return this;
     }
 
+    public SpinnerDatePickerDialogBuilder setAccentColor(String accentColor) {
+        this.mAccentColor = accentColor;
+        return this;
+    }
+
     public DatePickerDialog build() {
         if (context == null) throw new IllegalArgumentException("Context must not be null");
         if (maxDate.getTime().getTime() <= minDate.getTime().getTime()) throw new IllegalArgumentException("Max date is not after Min date");
 
-        return new DatePickerDialog(context, theme, spinnerTheme, callBack, defaultDate, minDate, maxDate, isDayShown, isTitleShown, mTitleCaption);
+        return new DatePickerDialog(context, theme, spinnerTheme, callBack, defaultDate, minDate, maxDate, isDayShown, isTitleShown, mTitleCaption, mAccentColor);
     }
+
+
 }
