@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     private final OnDateSetListener mCallBack;
     private final DateFormat mTitleDateFormat;
     private String mTitleCaption = "";
+    private String mAccentColor;
 
     private boolean mIsDayShown = true;
     private boolean mIsTitleShown = true;
@@ -54,7 +56,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
                      Calendar maxDate,
                      boolean isDayShown,
                      boolean isTitleShown,
-                     String titleCaption) {
+                     String titleCaption,
+                     String accentColor) {
         super(context, theme);
 
         mCallBack = callBack;
@@ -78,7 +81,14 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         mDatePicker.setMinDate(minDate.getTimeInMillis());
         mDatePicker.setMaxDate(maxDate.getTimeInMillis());
         mDatePicker.init(defaultDate.get(Calendar.YEAR), defaultDate.get(Calendar.MONTH), defaultDate.get(Calendar.DAY_OF_MONTH), isDayShown, this);
-
+        if (accentColor!=null) {
+            mAccentColor = accentColor;
+            try {
+                mDatePicker.setAccentColor(Color.parseColor(mAccentColor));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -135,5 +145,19 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         c.set(Calendar.DAY_OF_MONTH, day);
         updateTitle(c);
         mDatePicker.init(year, month, day, mIsDayShown, this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mAccentColor!=null) {
+            try {
+                this.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(mAccentColor));
+                this.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(mAccentColor));
+                this.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor(mAccentColor));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

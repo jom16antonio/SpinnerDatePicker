@@ -18,6 +18,8 @@ package com.tsongkha.spinnerdatepicker;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.InputType;
@@ -558,5 +560,33 @@ public class DatePicker extends FrameLayout {
             dest.writeLong(maxDate);
             dest.writeByte(isDaySpinnerShown ? (byte) 1 : (byte) 0);
         }
+    }
+
+    private void setDividerColor(NumberPicker picker, int color) {
+
+        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (java.lang.reflect.Field pf : pickerFields) {
+            if (pf.getName().equals("mSelectionDivider")) {
+                pf.setAccessible(true);
+                try {
+                    ColorDrawable colorDrawable = new ColorDrawable(color);
+                    pf.set(picker, colorDrawable);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+    }
+
+    public void setAccentColor(int color) {
+        setDividerColor(mDaySpinner, color);
+        setDividerColor(mMonthSpinner, color);
+        setDividerColor(mYearSpinner, color);
     }
 }
